@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FloriAI — Ghid & inspirație</title>
+  <meta name="description" content="Site despre flori cu generator AI de descrieri, îngrijire și idei de buchete." />
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --card:#121926;
+      --card2:#0f1622;
+      --text:#e8eef6;
+      --muted:#a9b4c3;
+      --accent:#7c5cff;
+      --accent2:#35d0ba;
+      --warn:#ffcc66;
+      --border:rgba(255,255,255,.10);
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans";
+      color:var(--text);
+      background:
+        radial-gradient(900px 500px at 20% -10%, rgba(124,92,255,.25), transparent 60%),
+        radial-gradient(700px 400px at 90% 10%, rgba(53,208,186,.18), transparent 55%),
+        radial-gradient(900px 600px at 30% 120%, rgba(255,204,102,.12), transparent 55%),
+        var(--bg);
+      line-height:1.4;
+    }
+    a{color:inherit}
+    .wrap{max-width:1100px;margin:0 auto;padding:28px}
+    header{
+      display:flex; gap:18px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+      padding:18px 18px;
+      background:linear-gradient(180deg, rgba(18,25,38,.9), rgba(18,25,38,.6));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      position:sticky; top:14px; backdrop-filter: blur(8px);
+      z-index:5;
+    }
+    .brand{display:flex; gap:12px; align-items:center}
+    .logo{
+      width:44px;height:44px;border-radius:14px;
+      background: radial-gradient(circle at 30% 30%, rgba(124,92,255,.9), rgba(53,208,186,.75));
+      box-shadow: 0 10px 20px rgba(0,0,0,.35);
+      display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .logo svg{filter:drop-shadow(0 6px 10px rgba(0,0,0,.35))}
+    .brand h1{font-size:18px;margin:0}
+    .brand p{margin:0;color:var(--muted);font-size:13px}
+    nav{display:flex; gap:10px; flex-wrap:wrap}
+    .chip{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      padding:9px 12px;
+      border-radius:999px;
+      text-decoration:none;
+      font-size:13px;
+    }
+    .chip:hover{background:rgba(255,255,255,.07)}
+    .hero{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+    }
+    @media (max-width: 900px){
+      .hero{grid-template-columns: 1fr}
+      header{position:static}
+    }
+    .card{
+      background:linear-gradient(180deg, rgba(18,25,38,.86), rgba(15,22,34,.70));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+    .title{
+      font-size:26px;margin:2px 0 10px 0; letter-spacing:.2px
+    }
+    .subtitle{color:var(--muted); margin:0 0 14px 0}
+    .grid{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns: 1fr 1fr} }
+    @media (max-width: 640px){ .grid{grid-template-columns: 1fr} }
+    .mini{
+      padding:14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--border);
+    }
+    .mini h3{margin:0 0 8px 0; font-size:15px}
+    .mini p{margin:0;color:var(--muted); font-size:13px}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    input, select, textarea{
+      width:100%;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--border);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      outline:none;
+      font-size:14px;
+    }
+    textarea{min-height:92px; resize:vertical}
+    label{font-size:13px;color:var(--muted);display:block;margin:10px 0 6px 0}
+    .btn{
+      cursor:pointer;
+      border:none;
+      background:linear-gradient(135deg, rgba(124,92,255,.95), rgba(53,208,186,.85));
+      color:#081018;
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:700;
+      box-shadow: 0 12px 26px rgba(0,0,0,.35);
+    }
+    .btn:hover{filter:brightness(1.06)}
+    .btn.ghost{
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border:1px solid var(--border);
+      box-shadow:none;
+      font-weight:600;
+    }
+    .out{
+      margin-top:12px;
+      padding:12px 12px;
+      border-radius:14px;
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--border);
+      white-space:pre-wrap;
+      color:var(--text);
+      min-height:120px;
+    }
+    .kpi{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+    .pill{
+      font-size:12px;
+      padding:8px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--border);
+      color:var(--muted);
+    }
+    footer{
+      margin:18px 0 6px 0;
+      color:var(--muted);
+      font-size:12px;
+      text-align:center;
+    }
+    .badge{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:6px 10px;border-radius:999px;border:1px solid var(--border);
+      background:rgba(255,255,255,.04); color:var(--muted); font-size:12px;
+    }
+    .hr{height:1px;background:var(--border); margin:14px 0}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <path d="M12 21s-7-4.6-7-11a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 6.4-7 11-7 11Z" stroke="white" stroke-width="1.6" opacity=".95"/>
+            <path d="M12 8.2c.7-1.3 2-2.2 3.6-2.2" stroke="white" stroke-width="1.6" opacity=".75"/>
+          </svg>
+        </div>
+        <div>
+          <h1>FloriAI</h1>
+          <p>Ghid de îngrijire + generator de descrieri</p>
+        </div>
+      </div>
+      <nav>
+        <a class="chip" href="#ai">Generator AI</a>
+        <a class="chip" href="#ghid">Îngrijire</a>
+        <a class="chip" href="#buchete">Buchete</a>
+        <a class="chip" href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="card">
+        <div class="badge">Text rapid pentru flori, buchete, postări, fișe</div>
+        <h2 class="title">Scrii despre flori. Clar. Frumos. În 10 secunde.</h2>
+        <p class="subtitle">
+          Alegi floarea, ocazia și stilul. Primești text, sfaturi de îngrijire și idei de aranjament.
+        </p>
+        <div class="kpi">
+          <span class="pill">Texte pentru catalog</span>
+          <span class="pill">Descrieri pentru magazin</span>
+          <span class="pill">Postări Facebook/Instagram</span>
+          <span class="pill">Fișe educative</span>
+        </div>
+        <div class="hr"></div>
+        <div class="row">
+          <button class="btn" onclick="document.querySelector('#ai').scrollIntoView({behavior:'smooth'})">Începe generatorul</button>
+          <button class="btn ghost" id="demoBtn">Generează un exemplu</button>
+        </div>
+      </div>
+
+      <div class="card" id="ghid">
+        <h3 style="margin:0 0 10px 0">Îngrijire rapidă</h3>
+        <div class="mini">
+          <h3>Regula apei curate</h3>
+          <p>Schimbi apa la 1–2 zile. Tai 1 cm din tulpini, oblic, înainte să pui florile la loc.</p>
+        </div>
+        <div style="height:10px"></div>
+        <div class="mini">
+          <h3>Locul potrivit</h3>
+          <p>Ții buchetul departe de calorifer, soare direct și fructe. Etilena grăbește ofilirea.</p>
+        </div>
+        <div style="height:10px"></div>
+        <div class="mini">
+          <h3>Curățenie</h3>
+          <p>Îndepărtezi frunzele care ajung în apă. Reduci bacteriile și mirosul.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid" id="ai" style="margin-top:16px">
+      <div class="card" style="grid-column: span 2">
+        <h3 style="margin:0 0 6px 0">Generator “AI” de text despre flori</h3>
+        <p style="margin:0 0 12px 0;color:var(--muted);font-size:13px">
+          Funcționează direct în browser. Nu cere cont. Nu trimite date.
+          Dacă vrei AI real (OpenAI), ai opțiune mai jos.
+        </p>
+
+        <div class="row">
+          <div style="flex:1; min-width:220px">
+            <label for="flower">Floarea</label>
+            <select id="flower">
+              <option>Trandafir</option>
+              <option>Lalea</option>
+              <option>Orhidee</option>
+              <option>Crin</option>
+              <option>Bujor</option>
+              <option>Floarea-soarelui</option>
+              <option>Garoafă</option>
+              <option>Hortensie</option>
+              <option>Lavandă</option>
+              <option>Crizantemă</option>
+            </select>
+          </div>
+          <div style="flex:1; min-width:220px">
+            <label for="occasion">Ocazia</label>
+            <select id="occasion">
+              <option>Cadou</option>
+              <option>Zi de naștere</option>
+              <option>Mulțumire</option>
+              <option>Felicitare</option>
+              <option>Nuntă</option>
+              <option>8 Martie</option>
+              <option>Mărțișor</option>
+              <option>Postare social media</option>
+            </select>
+          </div>
+          <div style="flex:1; min-width:220px">
+            <label for="tone">Stil</label>
+            <select id="tone">
+              <option>Elegant</option>
+              <option>Cald</option>
+              <option>Modern</option>
+              <option>Scurt și de impact</option>
+              <option>Informativ</option>
+              <option>Poetic</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div style="flex:1; min-width:220px">
+            <label for="length">Lungime</label>
+            <select id="length">
+              <option value="short">Scurt (2–3 fraze)</option>
+              <option value="medium" selected>Mediu (6–8 fraze)</option>
+              <option value="long">Lung (paragraf + listă)</option>
+            </select>
+          </div>
+          <div style="flex:2; min-width:220px">
+            <label for="extra">Detalii (culoare, parfum, mesaj, buget, etc.)</label>
+            <input id="extra" placeholder="Ex: roșu, parfumat, buchet mic, mesaj pentru o colegă" />
+          </div>
+        </div>
+
+        <label for="prompt">Cererea ta</label>
+        <textarea id="prompt" placeholder="Ex: Scrie o descriere pentru un buchet de lalele pentru 8 Martie."></textarea>
+
+        <div class="row" style="margin-top:10px">
+          <button class="btn" id="genBtn">Generează text</button>
+          <button class="btn ghost" id="copyBtn">Copiază</button>
+          <button class="btn ghost" id="clearBtn">Șterge</button>
+        </div>
+
+        <div class="out" id="out" aria-live="polite"></div>
+
+        <div class="hr"></div>
+
+        <details>
+          <summary style="cursor:pointer;color:var(--muted)">Vrei AI real (OpenAI API) în loc de generator local?</summary>
+          <div style="margin-top:10px;color:var(--muted);font-size:13px">
+            Varianta sigură folosește un server (Node/Express) ca să nu expui cheia API în browser.
+            Dacă vrei, îți dau și varianta completă cu backend + deploy pe Vercel.
+          </div>
+        </details>
+      </div>
+
+      <div class="card" id="buchete">
+        <h3 style="margin:0 0 10px 0">Idei rapide de buchete</h3>
+        <div class="mini">
+          <h3>Romantic</h3>
+          <p>Trandafiri + eucalipt + ambalaj simplu. Mesaj: o frază scurtă, personală.</p>
+        </div>
+        <div style="height:10px"></div>
+        <div class="mini">
+          <h3>Fresh de primăvară</h3>
+          <p>Lalele + frezii + verdeață ușoară. Culori: 2 nuanțe apropiate.</p>
+        </div>
+        <div style="height:10px"></div>
+        <div class="mini">
+          <h3>Elegant</h3>
+          <p>Orhidee + hortensie + panglică satin. Accent pe volum, nu pe multe culori.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="contact" style="margin-top:16px">
+      <h3 style="margin:0 0 8px 0">Contact</h3>
+      <p style="margin:0;color:var(--muted);font-size:13px">
+        Editezi această secțiune cu datele tale: telefon, adresă, program.
+      </p>
+      <div class="row" style="margin-top:10px">
+        <div class="mini" style="flex:1;min-width:240px">
+          <h3>Telefon</h3>
+          <p>07xx xxx xxx</p>
+        </div>
+        <div class="mini" style="flex:1;min-width:240px">
+          <h3>Adresă</h3>
+          <p>Str. Exemplu nr. 10, Constanța</p>
+        </div>
+        <div class="mini" style="flex:1;min-width:240px">
+          <h3>Program</h3>
+          <p>L–V: 09:00–18:00 • S: 10:00–14:00</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      FloriAI • Site static, ușor de publicat pe GitHub Pages sau Netlify.
+    </footer>
+  </div>
+
+  <script>
+    const flowerCare = {
+      "Trandafir": ["Schimbi apa zilnic.", "Tai tulpina oblic, 1 cm.", "Eviți soarele direct."],
+      "Lalea": ["Pui puțină apă în vază.", "Tai tulpina drept.", "Ții buchetul la rece noaptea."],
+      "Orhidee": ["Nu îneci rădăcinile.", "Lumina difuză.", "Uzi rar, dar constant."],
+      "Crin": ["Scoți staminele ca să nu păteze.", "Apa curată la 2 zile.", "Ții la răcoare."],
+      "Bujor": ["Tai tulpina oblic.", "Îndepărtezi frunzele din apă.", "Schimbi apa la 1–2 zile."],
+      "Floarea-soarelui": ["Vază înaltă.", "Multă apă.", "Tai tulpina la 2 zile."],
+      "Garoafă": ["Apa rece.", "Tai ușor tulpina.", "Eviți fructele lângă vază."],
+      "Hortensie": ["Multă apă.", "Poți pulveriza ușor florile.", "Tai tulpina și o zdrobești puțin."],
+      "Lavandă": ["Uscare în buchețele.", "Loc aerisit.", "Fără soare direct."],
+      "Crizantemă": ["Rezistă mult la rece.", "Schimbi apa la 2 zile.", "Îndepărtezi frunzele din apă."]
+    };
+
+    function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+    function buildText({flower, occasion, tone, length, extra, prompt}){
+      const styles = {
+        "Elegant": [
+          "Un buchet de {flower} aduce o notă rafinată.",
+          "Linie curată, volum echilibrat, detalii fine.",
+          "Potrivit pentru {occasion}, fără exces de culori."
+        ],
+        "Cald": [
+          "{flower} transmit grijă și apropiere.",
+          "Pentru {occasion}, mesajul rămâne personal și direct.",
+          "Alege nuanțe blânde și un ambalaj simplu."
+        ],
+        "Modern": [
+          "{flower} arată bine în combinații minimaliste.",
+          "Pentru {occasion}, merg forme geometrice și verdeață puțină.",
+          "Culori: una dominantă, una accent."
+        ],
+        "Scurt și de impact": [
+          "{flower}. {occasion}. Mesaj clar.",
+          "Un gest care se vede.",
+          "Îl oferi și ai spus tot."
+        ],
+        "Informativ": [
+          "{flower} au un aspect puternic și se potrivesc ușor în aranjamente.",
+          "Pentru {occasion}, recomand un buchet cu 2–3 elemente, nu mai mult.",
+          "Îngrijire: apă curată, tulpini retezate, fără soare direct."
+        ],
+        "Poetic": [
+          "{flower} păstrează o liniște frumoasă în cameră.",
+          "Pentru {occasion}, buchetul spune o poveste scurtă.",
+          "Culoarea rămâne primul mesaj."
+        ]
+      };
+
+      const base = (styles[tone] || styles["Elegant"]).map(s =>
+        s.replaceAll("{flower}", flower).replaceAll("{occasion}", occasion)
+      );
+
+      const care = flowerCare[flower] || ["Schimbi apa la 1–2 zile.", "Tai tulpinile.", "Ții la răcoare."];
+      const extraLine = extra && extra.trim().length
+        ? `Detalii cerute: ${extra.trim()}.`
+        : "";
+
+      let text = "";
+
+      if(length === "short"){
+        text =
+          `${base[0]}\n${extraLine ? extraLine + "\n" : ""}${base[1] || ""}`.trim();
+      }
+
+      if(length === "medium"){
+        const lead = prompt && prompt.trim().length
+          ? `Cererea ta: ${prompt.trim()}`
+          : `Text pentru: ${occasion}.`;
+        text =
+          `${lead}\n\n${base.join(" ")}\n\nÎngrijire rapidă:\n- ${care[0]}\n- ${care[1]}\n- ${care[2]}\n` +
+          (extraLine ? `\n${extraLine}\n` : "");
+      }
+
+      if(length === "long"){
+        const headline = `${flower} pentru ${occasion}`;
+        const msgIdeas = [
+          "Mesaj: Mulțumesc pentru tot.",
+          "Mesaj: Te apreciez și îți doresc o zi bună.",
+          "Mesaj: La mulți ani cu sănătate și liniște.",
+          "Mesaj: Felicitări. Mergi înainte."
+        ];
+        text =
+          `${headline}\n\n${base.join(" ")}\n\nRecomandare de aranjament:\n- 1 floare dominantă: ${flower}\n- 1 element de volum: verdeață sau hortensie\n- 1 detaliu de finisaj: panglică simplă\n\nÎngrijire:\n- ${care[0]}\n- ${care[1]}\n- ${care[2]}\n\nIdee de mesaj:\n- ${pick(msgIdeas)}\n` +
+          (extraLine ? `\n${extraLine}\n` : "");
+      }
+
+      return text.trim();
+    }
+
+    const elFlower = document.getElementById('flower');
+    const elOccasion = document.getElementById('occasion');
+    const elTone = document.getElementById('tone');
+    const elLength = document.getElementById('length');
+    const elExtra = document.getElementById('extra');
+    const elPrompt = document.getElementById('prompt');
+    const elOut = document.getElementById('out');
+
+    function generate(){
+      const text = buildText({
+        flower: elFlower.value,
+        occasion: elOccasion.value,
+        tone: elTone.value,
+        length: elLength.value,
+        extra: elExtra.value,
+        prompt: elPrompt.value
+      });
+      elOut.textContent = text || "Scrie o cerere și apasă Generează.";
+    }
+
+    document.getElementById('genBtn').addEventListener('click', generate);
+
+    document.getElementById('copyBtn').addEventListener('click', async ()=>{
+      const t = elOut.textContent.trim();
+      if(!t) return;
+      try{
+        await navigator.clipboard.writeText(t);
+      }catch(e){
+        const ta = document.createElement('textarea');
+        ta.value = t;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', ()=>{
+      elPrompt.value = "";
+      elExtra.value = "";
+      elOut.textContent = "";
+    });
+
+    document.getElementById('demoBtn').addEventListener('click', ()=>{
+      elFlower.value = "Lalea";
+      elOccasion.value = "Mărțișor";
+      elTone.value = "Scurt și de impact";
+      elLength.value = "medium";
+      elExtra.value = "culori: alb + roșu, buchet mic";
+      elPrompt.value = "Scrie un text pentru o postare despre un buchet de lalele de Mărțișor.";
+      generate();
+      document.querySelector('#ai').scrollIntoView({behavior:'smooth'});
+    });
+
+    // primele texte
+    generate();
+  </script>
+</body>
+</html>
